@@ -6,9 +6,8 @@ import com.simibubi.create.content.contraptions.behaviour.MovementContext
 import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld
 import dev.engine_room.flywheel.api.visualization.VisualizationContext
 import dev.engine_room.flywheel.lib.instance.InstanceTypes
-import dev.engine_room.flywheel.lib.material.Materials
+import dev.engine_room.flywheel.lib.instance.TransformedInstance
 import dev.engine_room.flywheel.lib.model.Models
-import dev.engine_room.flywheel.lib.model.baked.BakedModelBuilder
 import dev.engine_room.flywheel.lib.model.baked.PartialModel
 import net.minecraft.world.phys.Vec3
 
@@ -17,28 +16,9 @@ class EnchantableRollerActorVisual(
     simulationWorld: VirtualRenderWorld,
     movementContext: MovementContext,
 ) : HarvesterActorVisual(visualizationContext, simulationWorld, movementContext) {
-    private val enchantedWheel = instancerProvider.instancer(
-        InstanceTypes.TRANSFORMED,
-        BakedModelBuilder(rollingPartial.get())
-            .materialFunc { _, _ -> Materials.GLINT }
-            .build()
-    ).createInstance().apply {
-        light(localBlockLight(), 0)
-        setChanged()
-    }
-
-    private val frame = instancerProvider.instancer(
+    private val frame: TransformedInstance = instancerProvider.instancer(
         InstanceTypes.TRANSFORMED,
         Models.partial(AllPartialModels.ROLLER_FRAME)
-    ).createInstance().apply {
-        light(localBlockLight(), 0)
-    }
-
-    private val enchantedFrame = instancerProvider.instancer(
-        InstanceTypes.TRANSFORMED,
-        BakedModelBuilder(AllPartialModels.ROLLER_FRAME.get())
-            .materialFunc { _, _ -> Materials.GLINT }
-            .build()
     ).createInstance().apply {
         light(localBlockLight(), 0)
     }
@@ -55,25 +35,7 @@ class EnchantableRollerActorVisual(
             .rotateYDegrees(90f)
             .setChanged()
 
-        enchantedWheel.setIdentityTransform()
-            .translate(context.localPos)
-            .center()
-            .rotateYDegrees(horizontalAngle)
-            .uncenter()
-            .translate(0.0, -.25, (17 / 16f).toDouble())
-            .rotateXDegrees(rotation.toFloat())
-            .translate(0.0, -.5, .5)
-            .rotateYDegrees(90f)
-            .setChanged()
-
         frame.setIdentityTransform()
-            .translate(context.localPos)
-            .center()
-            .rotateYDegrees(horizontalAngle + 180)
-            .uncenter()
-            .setChanged()
-
-        enchantedFrame.setIdentityTransform()
             .translate(context.localPos)
             .center()
             .rotateYDegrees(horizontalAngle + 180)
@@ -95,8 +57,6 @@ class EnchantableRollerActorVisual(
 
     override fun _delete() {
         super._delete()
-        enchantedWheel.delete()
         frame.delete()
-        enchantedFrame.delete()
     }
 }

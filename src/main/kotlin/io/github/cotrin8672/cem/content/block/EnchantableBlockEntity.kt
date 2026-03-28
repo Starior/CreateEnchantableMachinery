@@ -32,6 +32,8 @@ interface EnchantableBlockEntity {
                 .ifPresent {
                     setEnchantment(it)
                 }
+        } else {
+            setEnchantment(ItemEnchantments.EMPTY)
         }
         if (tag.contains("SourceItem")) {
             val itemId = tag.getString("SourceItem")

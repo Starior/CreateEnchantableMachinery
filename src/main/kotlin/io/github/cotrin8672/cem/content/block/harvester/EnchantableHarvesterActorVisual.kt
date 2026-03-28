@@ -5,9 +5,7 @@ import com.simibubi.create.content.contraptions.behaviour.MovementContext
 import com.simibubi.create.content.contraptions.render.ActorVisual
 import dev.engine_room.flywheel.api.visualization.VisualizationContext
 import dev.engine_room.flywheel.lib.instance.InstanceTypes
-import dev.engine_room.flywheel.lib.material.Materials
 import dev.engine_room.flywheel.lib.model.Models
-import dev.engine_room.flywheel.lib.model.baked.BakedModelBuilder
 import dev.engine_room.flywheel.lib.model.baked.PartialModel
 import net.createmod.catnip.animation.AnimationTickHolder
 import net.createmod.catnip.math.AngleHelper
@@ -34,11 +32,6 @@ class EnchantableHarvesterActorVisual(
         InstanceTypes.TRANSFORMED,
         Models.partial(getRollingPartial())
     ).createInstance()
-    private val enchantedHarvester = instancerProvider.instancer(
-        InstanceTypes.TRANSFORMED,
-        BakedModelBuilder(AllPartialModels.DRILL_HEAD.get()).materialFunc { _, _ -> Materials.GLINT }.build()
-    ).createInstance()
-
 
     private val horizontalAngle = facing.toYRot() + (if (facing.axis === Direction.Axis.X) 180 else 0)
     private var rotation = 0.0
@@ -46,7 +39,6 @@ class EnchantableHarvesterActorVisual(
 
     init {
         harvester.light(localBlockLight(), 0).setChanged()
-        enchantedHarvester.light(localBlockLight(), 0).setChanged()
     }
 
     private fun getRollingPartial(): PartialModel {
@@ -84,16 +76,6 @@ class EnchantableHarvesterActorVisual(
     }
 
     override fun beginFrame() {
-        enchantedHarvester.setIdentityTransform()
-            .translate(context.localPos)
-            .center()
-            .rotateYDegrees(horizontalAngle)
-            .uncenter()
-            .translate(getRotationOffset())
-            .rotateXDegrees(getRotation().toFloat())
-            .translateBack(getRotationOffset())
-            .setChanged()
-
         harvester.setIdentityTransform()
             .translate(context.localPos)
             .center()
@@ -107,7 +89,6 @@ class EnchantableHarvesterActorVisual(
 
     override fun _delete() {
         harvester.delete()
-        enchantedHarvester.delete()
     }
 
     private fun getRotation(): Double {

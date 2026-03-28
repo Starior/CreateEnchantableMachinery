@@ -16,6 +16,4 @@ object PartialModelRegistration {
     fun block(path: String): PartialModel {
         return PartialModel.of(Cem.asResource(path))
     }
-
-    fun register() {}
 }

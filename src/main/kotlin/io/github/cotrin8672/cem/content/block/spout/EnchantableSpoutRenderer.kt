@@ -1,12 +1,9 @@
 package io.github.cotrin8672.cem.content.block.spout
 
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator
 import com.simibubi.create.AllPartialModels
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer
-import io.github.cotrin8672.cem.client.CustomRenderType
-import io.github.cotrin8672.cem.config.CemConfig
-import io.github.cotrin8672.cem.util.nonNullLevel
+import io.github.cotrin8672.cem.client.EnchantableKineticTint
 import io.github.cotrin8672.cem.util.use
 import net.createmod.catnip.platform.NeoForgeCatnipServices
 import net.createmod.catnip.render.CachedBuffers
@@ -15,14 +12,12 @@ import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.util.Mth
-import net.minecraft.util.RandomSource
 import net.minecraft.world.phys.AABB
-import net.neoforged.neoforge.client.model.data.ModelData
 import kotlin.math.max
 import kotlin.math.pow
 
 class EnchantableSpoutRenderer(
-    private val context: BlockEntityRendererProvider.Context,
+    @Suppress("UNUSED_PARAMETER") context: BlockEntityRendererProvider.Context,
 ) : SafeBlockEntityRenderer<EnchantableSpoutBlockEntity>() {
     override fun renderSafe(
         be: EnchantableSpoutBlockEntity,
@@ -32,17 +27,6 @@ class EnchantableSpoutRenderer(
         light: Int,
         overlay: Int,
     ) {
-        if (CemConfig.CONFIG.renderGlint.get()) {
-            val consumer = SheetedDecalTextureGenerator(
-                buffer.getBuffer(CustomRenderType.GLINT),
-                ms.last(),
-                0.007125f
-            )
-            context.blockRenderDispatcher.renderBatched(
-                be.blockState, be.blockPos, be.nonNullLevel, ms, consumer, true, RANDOM, ModelData.EMPTY, null
-            )
-        }
-
         val tank = be.fluidTank
 
         val primaryTank = tank.primaryTank
@@ -83,19 +67,12 @@ class EnchantableSpoutRenderer(
 
         ms.use {
             for (bit in BITS) {
-                CachedBuffers.partial(bit, be.blockState)
-                    .light<SuperByteBuffer>(light)
-                    .renderInto(ms, buffer.getBuffer(RenderType.solid()))
-                if (CemConfig.CONFIG.renderGlint.get()) {
-                    val consumer = SheetedDecalTextureGenerator(
-                        buffer.getBuffer(CustomRenderType.GLINT),
-                        ms.last(),
-                        0.007125f
-                    )
-                    CachedBuffers.partial(bit, be.blockState)
-                        .light<SuperByteBuffer>(light)
-                        .renderInto(ms, consumer)
+                val part = CachedBuffers.partial(bit, be.blockState)
+                if (EnchantableKineticTint.appliesToBlockEntity(be)) {
+                    part.color<SuperByteBuffer>(EnchantableKineticTint.enchantTintColor())
                 }
+                part.light<SuperByteBuffer>(light)
+                    .renderInto(ms, buffer.getBuffer(RenderType.solid()))
                 ms.translate(0f, -3 * squeeze / 32f, 0f)
             }
         }
@@ -124,7 +101,6 @@ class EnchantableSpoutRenderer(
     }
 
     companion object {
-        private val RANDOM = RandomSource.create()
         private val BITS =
             arrayOf(AllPartialModels.SPOUT_TOP, AllPartialModels.SPOUT_MIDDLE, AllPartialModels.SPOUT_BOTTOM)
     }

@@ -1,8 +1,6 @@
 package io.github.cotrin8672.cem.content.block.saw
 
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator
-import com.mojang.math.Axis
 import com.simibubi.create.AllPartialModels
 import com.simibubi.create.content.contraptions.behaviour.MovementContext
 import com.simibubi.create.content.contraptions.render.ContraptionMatrices
@@ -16,14 +14,10 @@ import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRender
 import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld
 import dev.engine_room.flywheel.api.visualization.VisualizationManager
 import dev.engine_room.flywheel.lib.model.baked.PartialModel
-import dev.engine_room.flywheel.lib.transform.TransformStack
-import io.github.cotrin8672.cem.client.CustomRenderType
-import io.github.cotrin8672.cem.config.CemConfig
-import io.github.cotrin8672.cem.registry.PartialModelRegistration
+import io.github.cotrin8672.cem.client.EnchantableKineticTint
 import io.github.cotrin8672.cem.util.nonNullLevel
-import io.github.cotrin8672.cem.util.use
+import net.createmod.catnip.theme.Color
 import net.createmod.catnip.math.AngleHelper
-import net.createmod.catnip.math.VecHelper
 import net.createmod.catnip.render.CachedBuffers
 import net.createmod.catnip.render.SuperByteBuffer
 import net.minecraft.client.Minecraft
@@ -33,16 +27,16 @@ import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.core.Direction
 import net.minecraft.util.Mth
-import net.minecraft.util.RandomSource
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.level.block.Rotation
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.phys.Vec3
 import kotlin.math.abs
+import com.mojang.math.Axis
 
 class EnchantableSawRenderer(
-    private val context: BlockEntityRendererProvider.Context,
+    @Suppress("UNUSED_PARAMETER") context: BlockEntityRendererProvider.Context,
 ) : SafeBlockEntityRenderer<EnchantableSawBlockEntity>() {
     private fun getRotatedModel(be: EnchantableSawBlockEntity): SuperByteBuffer {
         val state = be.blockState
@@ -69,20 +63,6 @@ class EnchantableSawRenderer(
         renderBlade(be, ms, buffer, light)
         renderItems(be, partialTicks, ms, buffer, light, overlay)
         FilteringRenderer.renderOnBlockEntity(be, partialTicks, ms, buffer, light, overlay)
-
-        ms.use {
-            if (CemConfig.CONFIG.renderGlint.get()) {
-                val consumer = SheetedDecalTextureGenerator(
-                    buffer.getBuffer(CustomRenderType.GLINT),
-                    ms.last(),
-                    0.007125f
-                )
-
-                context.blockRenderDispatcher.renderBatched(
-                    be.blockState, be.blockPos, be.nonNullLevel, ms, consumer, true, RANDOM
-                )
-            }
-        }
 
         if (!VisualizationManager.supportsVisualization(be.level)) {
             renderShaft(be, ms, buffer, light)
@@ -119,29 +99,17 @@ class EnchantableSawRenderer(
 
             if (blockState.getValue(SawBlock.AXIS_ALONG_FIRST_COORDINATE)) rotate = true
         }
-        val enchantedBlade = PartialModelRegistration.ENCHANTABLE_SAW_BLADE
 
         val superBuffer = CachedBuffers.partialFacing(partial, blockState)
-        val enchantedSuperBuffer = CachedBuffers.partialFacing(enchantedBlade, blockState)
         if (rotate) {
             superBuffer.rotateCentered(AngleHelper.rad(90.0), Direction.UP)
-            enchantedSuperBuffer.rotateCentered(AngleHelper.rad(90.0), Direction.UP)
         }
+        val bladeTint =
+            if (EnchantableKineticTint.appliesToKinetic(be)) EnchantableKineticTint.enchantTintColor() else Color.WHITE
         superBuffer
-            .color<SuperByteBuffer>(0xFFFFFF)
+            .color<SuperByteBuffer>(bladeTint)
             .light<SuperByteBuffer>(light)
             .renderInto(ms, buffer.getBuffer(RenderType.cutoutMipped()))
-
-        val consumer = SheetedDecalTextureGenerator(
-            buffer.getBuffer(CustomRenderType.GLINT),
-            ms.last(),
-            0.007125f
-        )
-
-        enchantedSuperBuffer
-            .color<SuperByteBuffer>(0xFFFFFF)
-            .light<SuperByteBuffer>(light)
-            .renderInto(ms, consumer)
     }
 
     private fun renderShaft(
@@ -165,7 +133,8 @@ class EnchantableSawRenderer(
         if (processingMode && !be.inventory.isEmpty) {
             val alongZ = !be.blockState.getValue(SawBlock.AXIS_ALONG_FIRST_COORDINATE)
 
-            ms.use {
+            ms.pushPose()
+            try {
                 val moving = be.inventory.recipeDuration != 0f
                 var offset = if (moving) be.inventory.remainingTime / be.inventory.recipeDuration else 0f
                 val processingSpeed: Float = Mth.clamp(abs(be.speed) / 32, 1f, 128f)
@@ -202,13 +171,13 @@ class EnchantableSawRenderer(
                     itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, light, overlay, ms, buffer, be.level, 0)
                     break
                 }
+            } finally {
+                ms.popPose()
             }
         }
     }
 
     companion object {
-        private val RANDOM: RandomSource = RandomSource.create()
-
         fun renderInContraption(
             context: MovementContext,
             renderWorld: VirtualRenderWorld,
@@ -223,7 +192,7 @@ class EnchantableSawRenderer(
             val closestToFacing = Direction.getNearest(facingVec.x, facingVec.y, facingVec.z)
 
             val horizontal = closestToFacing.axis.isHorizontal
-            val backwards = VecHelper.isVecPointingTowards(context.relativeMotion, facing.opposite)
+            val backwards = net.createmod.catnip.math.VecHelper.isVecPointingTowards(context.relativeMotion, facing.opposite)
             val moving = context.animationSpeed != 0f
             val shouldAnimate =
                 (context.contraption.stalled && horizontal) || (!context.contraption.stalled && !backwards && moving)
@@ -234,53 +203,20 @@ class EnchantableSawRenderer(
                 if (shouldAnimate) CachedBuffers.partial(AllPartialModels.SAW_BLADE_VERTICAL_ACTIVE, state)
                 else CachedBuffers.partial(AllPartialModels.SAW_BLADE_VERTICAL_INACTIVE, state)
             }
-            val enchantedSuperBuffer = CachedBuffers.partial(PartialModelRegistration.ENCHANTABLE_SAW_BLADE, state)
 
             superBuffer.transform(matrices.model)
                 .center()
                 .rotateYDegrees(AngleHelper.horizontalAngle(facing))
                 .rotateXDegrees(AngleHelper.verticalAngle(facing))
 
-            enchantedSuperBuffer.transform(matrices.model)
-                .center()
-                .rotateYDegrees(AngleHelper.horizontalAngle(facing))
-                .rotateXDegrees(AngleHelper.verticalAngle(facing))
-
             if (!SawBlock.isHorizontal(state)) {
                 superBuffer.rotateZDegrees((if (state.getValue(SawBlock.AXIS_ALONG_FIRST_COORDINATE)) 90f else 0f))
-                enchantedSuperBuffer.rotateZDegrees((if (state.getValue(SawBlock.AXIS_ALONG_FIRST_COORDINATE)) 90f else 0f))
             }
 
             superBuffer.uncenter()
                 .light<SuperByteBuffer>(LevelRenderer.getLightColor(renderWorld, context.localPos))
                 .useLevelLight<SuperByteBuffer>(context.world, matrices.world)
                 .renderInto(matrices.viewProjection, buffer.getBuffer(RenderType.cutoutMipped()))
-
-            val consumer = SheetedDecalTextureGenerator(
-                buffer.getBuffer(CustomRenderType.GLINT),
-                matrices.model.last(),
-                0.007125f
-            )
-
-            enchantedSuperBuffer.uncenter()
-                .light<SuperByteBuffer>(LevelRenderer.getLightColor(renderWorld, context.localPos))
-                .useLevelLight<SuperByteBuffer>(context.world, matrices.world)
-                .renderInto(matrices.viewProjection, consumer)
-
-            if (!VisualizationManager.supportsVisualization(context.world) && CemConfig.CONFIG.renderGlint.get()) {
-                matrices.modelViewProjection.use {
-                    TransformStack.of(matrices.modelViewProjection).translate(context.localPos)
-                    Minecraft.getInstance().blockRenderer.renderBatched(
-                        context.state,
-                        context.localPos,
-                        context.world,
-                        matrices.modelViewProjection,
-                        consumer,
-                        true,
-                        RANDOM
-                    )
-                }
-            }
         }
     }
 }

@@ -2,18 +2,14 @@ package io.github.cotrin8672.cem.content.block.harvester
 
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.content.contraptions.actors.harvester.HarvesterMovementBehaviour
-import com.simibubi.create.content.contraptions.actors.harvester.HarvesterRenderer
 import com.simibubi.create.content.contraptions.behaviour.MovementContext
 import com.simibubi.create.content.contraptions.render.ActorVisual
-import com.simibubi.create.content.contraptions.render.ContraptionMatrices
 import com.simibubi.create.foundation.item.ItemHelper
 import com.simibubi.create.foundation.utility.BlockHelper
 import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld
 import com.simibubi.create.infrastructure.config.AllConfigs
 import dev.engine_room.flywheel.api.visualization.VisualizationContext
-import io.github.cotrin8672.cem.config.CemConfig
 import io.github.cotrin8672.cem.util.EnchantedItemFactory
-import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.item.ItemStack
@@ -110,16 +106,5 @@ class EnchantableHarvesterMovementBehaviour : HarvesterMovementBehaviour() {
 
     override fun canBeDisabledVia(context: MovementContext?): ItemStack? {
         return AllBlocks.MECHANICAL_HARVESTER.asStack()
-    }
-
-    override fun renderInContraption(
-        context: MovementContext,
-        renderWorld: VirtualRenderWorld,
-        matrices: ContraptionMatrices,
-        buffers: MultiBufferSource,
-    ) {
-        HarvesterRenderer.renderInContraption(context, renderWorld, matrices, buffers)
-        if (CemConfig.CONFIG.renderGlint.get())
-            EnchantableHarvesterRenderer.renderInContraption(context, renderWorld, matrices, buffers)
     }
 }

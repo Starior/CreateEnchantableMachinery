@@ -54,5 +54,10 @@
   "createenchantablemachinery.ponder.spout.text_2": "A Spout with Efficiency enchantments can fill items with liquids faster",
   "createenchantablemachinery.ponder.spout.text_3": "When wearing Engineers' Goggles, you can view the applied enchantments",
   "createenchantablemachinery.ponder.tag.enchantable_blocks": "Enchantable Machinery",
-  "createenchantablemachinery.ponder.tag.enchantable_blocks.description": "Components which can apply some enchantments"
+  "createenchantablemachinery.ponder.tag.enchantable_blocks.description": "Components which can apply some enchantments",
+  "createenchantablemachinery.configuration.enchantmentTint": "Enchantment machinery tint",
+  "createenchantablemachinery.configuration.enchantTintRed": "Tint red",
+  "createenchantablemachinery.configuration.enchantTintGreen": "Tint green",
+  "createenchantablemachinery.configuration.enchantTintBlue": "Tint blue",
+  "createenchantablemachinery.configuration.enchantTintMix": "Tint blend (mix with white)"
 }

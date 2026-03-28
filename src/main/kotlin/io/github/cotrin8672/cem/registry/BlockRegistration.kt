@@ -174,6 +174,4 @@ object BlockRegistration {
         .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.partialBaseModel(c, p)) }
         .addLayer { Supplier { RenderType.cutoutMipped() } }
         .register()
-
-    fun register() {}
 }

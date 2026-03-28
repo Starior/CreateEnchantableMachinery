@@ -147,7 +147,7 @@ val generateModMetadata = tasks.withType<ProcessResources>().configureEach {
 
     val replaceProperties = mapOf(
         "minecraftVersion" to libs.versions.minecraft.get(),
-        "minecraftVersionRage" to "[${libs.versions.minecraft.get()},)",
+        "minecraftVersionRange" to "[${libs.versions.minecraft.get()},)",
         "neoforgeVersion" to libs.versions.neoforge.get(),
         "neoforgeVersionRange" to "[21.1.186,)",
         "loaderVersionRange" to "[5.9,)",
@@ -170,7 +170,6 @@ tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-sourceSets.main.get().resources.srcDir("src/generated/resources")
 neoForge.ideSyncTask(tasks.processResources)
 
 tasks.named<Wrapper>("wrapper").configure {

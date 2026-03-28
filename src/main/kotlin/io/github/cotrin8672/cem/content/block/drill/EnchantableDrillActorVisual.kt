@@ -6,9 +6,7 @@ import com.simibubi.create.content.contraptions.render.ActorVisual
 import com.simibubi.create.content.kinetics.drill.DrillBlock
 import dev.engine_room.flywheel.api.visualization.VisualizationContext
 import dev.engine_room.flywheel.lib.instance.InstanceTypes
-import dev.engine_room.flywheel.lib.material.Materials
 import dev.engine_room.flywheel.lib.model.Models
-import dev.engine_room.flywheel.lib.model.baked.BakedModelBuilder
 import net.createmod.catnip.animation.AnimationTickHolder
 import net.createmod.catnip.math.AngleHelper
 import net.createmod.catnip.math.VecHelper
@@ -22,12 +20,6 @@ class EnchantableDrillActorVisual(
     private val drillHead =
         instancerProvider.instancer(InstanceTypes.TRANSFORMED, Models.partial(AllPartialModels.DRILL_HEAD))
             .createInstance()
-    private val enchantedDrillHead =
-        instancerProvider.instancer(
-            InstanceTypes.TRANSFORMED,
-            BakedModelBuilder(AllPartialModels.DRILL_HEAD.get()).materialFunc { _, _ -> Materials.GLINT }
-                .build()
-        ).createInstance()
     private val facing = context.state.getValue(DrillBlock.FACING)
 
     private var rotation = 0.0
@@ -53,14 +45,6 @@ class EnchantableDrillActorVisual(
             .rotateZDegrees(getRotation().toFloat())
             .uncenter()
             .setChanged()
-
-        enchantedDrillHead.setIdentityTransform()
-            .translate(context.localPos)
-            .center()
-            .rotateToFace(facing.opposite)
-            .rotateZDegrees(getRotation().toFloat())
-            .uncenter()
-            .setChanged()
     }
 
     private fun getRotation(): Double {
@@ -70,6 +54,5 @@ class EnchantableDrillActorVisual(
 
     override fun _delete() {
         drillHead.delete()
-        enchantedDrillHead.delete()
     }
 }

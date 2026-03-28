@@ -54,5 +54,10 @@
   "createenchantablemachinery.ponder.spout.text_2": "Дозатор с чарами эффективности позволяет быстрее наполнять предметы жидкостью",
   "createenchantablemachinery.ponder.spout.text_3": "Надев инженерные очки, вы сможете увидеть наложенные чары",
   "createenchantablemachinery.ponder.tag.enchantable_blocks": "Зачаровываемое оборудование",
-  "createenchantablemachinery.ponder.tag.enchantable_blocks.description": "Компоненты, которые могут накладывать некоторые чары"
+  "createenchantablemachinery.ponder.tag.enchantable_blocks.description": "Компоненты, которые могут накладывать некоторые чары",
+  "createenchantablemachinery.configuration.enchantmentTint": "Тинт зачарованных механизмов",
+  "createenchantablemachinery.configuration.enchantTintRed": "Красный канал тинта",
+  "createenchantablemachinery.configuration.enchantTintGreen": "Зелёный канал тинта",
+  "createenchantablemachinery.configuration.enchantTintBlue": "Синий канал тинта",
+  "createenchantablemachinery.configuration.enchantTintMix": "Смешивание с белым (сила тинта)"
 }

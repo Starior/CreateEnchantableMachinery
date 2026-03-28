@@ -1,7 +1,6 @@
 package io.github.cotrin8672.cem.mixin;
 
 import io.github.cotrin8672.cem.util.AnvilCompatibilityContext;
-import io.github.cotrin8672.cem.util.EnchantableBlockMapping;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -13,7 +12,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -131,10 +129,7 @@ public class AnvilMenuMixin {
     }
 
     private static boolean isMachineBlockItem(ItemStack stack) {
-        if (stack.is(CEM_ENCHANTABLE_BLOCKS_TAG)) return true;
-        if (!(stack.getItem() instanceof BlockItem blockItem)) return false;
-        return EnchantableBlockMapping.getOriginalBlocks().contains(blockItem.getBlock())
-                || EnchantableBlockMapping.getEnchantableBlocks().contains(blockItem.getBlock());
+        return stack.is(CEM_ENCHANTABLE_BLOCKS_TAG);
     }
 
     private static boolean isEnchantmentSource(ItemStack stack) {

@@ -1,49 +1,50 @@
 package io.github.cotrin8672.cem.mixin;
 
-import io.github.cotrin8672.cem.util.EnchantableBlockMapping;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
+import io.github.cotrin8672.cem.content.block.EnchantableBlockEntity;
+import io.github.cotrin8672.cem.util.EnchantableRules;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockItem.class)
 public abstract class BlockItemMixin extends Item {
-    private static final TagKey<Item> CEM_ENCHANTABLE_BLOCKS_TAG =
-            TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("createenchantablemachinery", "enchantable_blocks"));
-
     public BlockItemMixin(Properties properties) {
         super(properties);
     }
 
-    @Shadow
-    public abstract Block getBlock();
-
-    @Shadow
-    protected abstract boolean canPlace(BlockPlaceContext context, BlockState state);
-
     @Inject(
-            method = "getPlacementState",
-            at = @At("HEAD"),
-            cancellable = true
+            method = "updateCustomBlockEntityTag",
+            at = @At("RETURN")
     )
-    public void cem$getPlacementState(BlockPlaceContext context, CallbackInfoReturnable<BlockState> cir) {
-        if (!context.getItemInHand().isEnchanted()) return;
-        if (!context.getItemInHand().is(CEM_ENCHANTABLE_BLOCKS_TAG)) return;
+    private void cem$applyEnchantmentsToPlacedBlockEntity(
+            BlockPos pos,
+            Level level,
+            Player player,
+            ItemStack stack,
+            BlockState state,
+            CallbackInfoReturnable<Boolean> cir
+    ) {
+        if (!stack.isEnchanted()) return;
+        if (!EnchantableRules.isEnchantableItemStack(stack)) return;
+        if (!EnchantableRules.isEnchantableBlockState(state)) return;
 
-        Block alternativeBlock = EnchantableBlockMapping.getAlternativeBlock(getBlock());
-        if (alternativeBlock == null) return;
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (!(blockEntity instanceof EnchantableBlockEntity enchantableBlockEntity)) return;
 
-        BlockState blockState = alternativeBlock.getStateForPlacement(context);
-        BlockState state = blockState != null && this.canPlace(context, blockState) ? blockState : null;
-        cir.setReturnValue(state);
+        ItemEnchantments enchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+        enchantableBlockEntity.setEnchantment(enchantments);
+        enchantableBlockEntity.setSourceItem(stack.getItem());
+        blockEntity.setChanged();
     }
 }

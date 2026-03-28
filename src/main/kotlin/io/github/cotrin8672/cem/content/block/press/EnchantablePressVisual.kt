@@ -3,16 +3,17 @@ package io.github.cotrin8672.cem.content.block.press
 import com.mojang.math.Axis
 import com.simibubi.create.AllPartialModels
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlock
+import com.simibubi.create.content.kinetics.base.ShaftVisual
+import io.github.cotrin8672.cem.client.EnchantableKineticTint
 import dev.engine_room.flywheel.api.instance.Instance
 import dev.engine_room.flywheel.api.visual.DynamicVisual
 import dev.engine_room.flywheel.api.visualization.VisualizationContext
 import dev.engine_room.flywheel.lib.instance.InstanceTypes
-import dev.engine_room.flywheel.lib.material.Materials
+import dev.engine_room.flywheel.lib.instance.OrientedInstance
 import dev.engine_room.flywheel.lib.model.Models
-import dev.engine_room.flywheel.lib.model.baked.BakedModelBuilder
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual
-import io.github.cotrin8672.cem.client.visual.EnchantedShaftVisual
 import net.createmod.catnip.math.AngleHelper
+import org.joml.Quaternionf
 import java.util.function.Consumer
 
 class EnchantablePressVisual(
@@ -20,27 +21,17 @@ class EnchantablePressVisual(
     blockEntity: EnchantableMechanicalPressBlockEntity,
     partialTick: Float,
 ) :
-    EnchantedShaftVisual<EnchantableMechanicalPressBlockEntity>(context, blockEntity, partialTick),
+    ShaftVisual<EnchantableMechanicalPressBlockEntity>(context, blockEntity, partialTick),
     SimpleDynamicVisual {
-    private val pressHead = instancerProvider().instancer(
+    private val pressHead: OrientedInstance = instancerProvider().instancer(
         InstanceTypes.ORIENTED,
         Models.partial(AllPartialModels.MECHANICAL_PRESS_HEAD)
     ).createInstance()
 
-    private val enchantedPressHead = instancerProvider().instancer(
-        InstanceTypes.ORIENTED,
-        BakedModelBuilder(AllPartialModels.MECHANICAL_PRESS_HEAD.get())
-            .materialFunc { _, _ -> Materials.GLINT }
-            .build()
-    ).createInstance()
-
     init {
-        val q = Axis.YP
+        val q: Quaternionf = Axis.YP
             .rotationDegrees(AngleHelper.horizontalAngle(blockState.getValue(MechanicalPressBlock.HORIZONTAL_FACING)))
-
         pressHead.rotation(q)
-        enchantedPressHead.rotation(q)
-
         transformModels(partialTick)
     }
 
@@ -50,36 +41,29 @@ class EnchantablePressVisual(
 
     private fun transformModels(pt: Float) {
         val renderedHeadOffset = getRenderedHeadOffset(pt)
-
         pressHead.position(visualPosition)
             .translatePosition(0f, -renderedHeadOffset, 0f)
-            .setChanged()
-
-        enchantedPressHead.position(visualPosition)
-            .translatePosition(0f, -renderedHeadOffset, 0f)
-            .setChanged()
+        EnchantableKineticTint.applyFlywheelTint(blockEntity, pressHead)
+        pressHead.setChanged()
     }
 
     private fun getRenderedHeadOffset(pt: Float): Float {
-        val pressingBehaviour = blockEntity!!.getPressingBehaviour()
-        return (pressingBehaviour.getRenderedHeadOffset(pt) * pressingBehaviour.mode.headOffset)
+        val pressingBehaviour = blockEntity.getPressingBehaviour()
+        return pressingBehaviour.getRenderedHeadOffset(pt) * pressingBehaviour.mode.headOffset
     }
 
     override fun updateLight(partialTick: Float) {
         super.updateLight(partialTick)
         relight(pressHead)
-        relight(enchantedPressHead)
     }
 
     override fun _delete() {
         super._delete()
         pressHead.delete()
-        enchantedPressHead.delete()
     }
 
     override fun collectCrumblingInstances(consumer: Consumer<Instance?>) {
         super.collectCrumblingInstances(consumer)
         consumer.accept(pressHead)
-        consumer.accept(enchantedPressHead)
     }
 }
