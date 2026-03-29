@@ -1,6 +1,7 @@
 package io.github.cotrin8672.cem.content.block.saw
 
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityVisual
+import com.simibubi.create.content.kinetics.saw.SawBlockEntity
 import io.github.cotrin8672.cem.client.EnchantableKineticTint
 import com.simibubi.create.content.kinetics.base.RotatingInstance
 import com.simibubi.create.content.kinetics.saw.SawVisual
@@ -11,9 +12,9 @@ import java.util.function.Consumer
 
 class EnchantableSawVisual(
     context: VisualizationContext?,
-    blockEntity: EnchantableSawBlockEntity?,
+    blockEntity: SawBlockEntity?,
     partialTick: Float,
-) : KineticBlockEntityVisual<EnchantableSawBlockEntity>(context, blockEntity, partialTick) {
+) : KineticBlockEntityVisual<SawBlockEntity>(context, blockEntity, partialTick) {
     private val rotatingModel: RotatingInstance = SawVisual.shaft(instancerProvider(), blockState)
         .setup(blockEntity)
         .setPosition(visualPosition)

@@ -2,6 +2,7 @@ package io.github.cotrin8672.cem.content.block.roller
 
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.content.contraptions.actors.roller.RollerMovementBehaviour
+import com.simibubi.create.content.contraptions.actors.roller.RollerRenderer
 import com.simibubi.create.content.contraptions.behaviour.MovementContext
 import com.simibubi.create.content.contraptions.render.ActorVisual
 import com.simibubi.create.content.contraptions.render.ContraptionMatrices
@@ -75,6 +76,6 @@ class EnchantableRollerMovementBehaviour : RollerMovementBehaviour() {
         buffers: MultiBufferSource,
     ) {
         if (!VisualizationManager.supportsVisualization(context.world))
-            EnchantableRollerRenderer.renderInContraption(context, renderWorld, matrices, buffers)
+            RollerRenderer.renderInContraption(context, renderWorld, matrices, buffers)
     }
 }

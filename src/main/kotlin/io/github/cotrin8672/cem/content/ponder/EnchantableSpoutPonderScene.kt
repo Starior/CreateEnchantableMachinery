@@ -5,7 +5,6 @@ import com.simibubi.create.AllItems
 import com.simibubi.create.content.fluids.FluidFX
 import com.simibubi.create.content.fluids.spout.SpoutBlockEntity
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder
-import io.github.cotrin8672.cem.content.block.spout.EnchantableSpoutBlockEntity
 import net.createmod.catnip.math.Pointing
 import net.createmod.catnip.math.VecHelper
 import net.createmod.ponder.api.PonderPalette
@@ -93,7 +92,7 @@ object EnchantableSpoutPonderScene {
             idle(10)
             world().modifyBlockEntityNBT(
                 util.select().position(enchantedSpout),
-                EnchantableSpoutBlockEntity::class.java
+                SpoutBlockEntity::class.java
             ) {
                 it.putInt("ProcessingTicks", 10)
             }

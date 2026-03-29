@@ -3,7 +3,6 @@ package io.github.cotrin8672.cem.content.ponder
 import com.simibubi.create.AllItems
 import com.simibubi.create.content.contraptions.actors.roller.RollerBlockEntity
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder
-import io.github.cotrin8672.cem.content.block.roller.EnchantableRollerBlockEntity
 import net.createmod.catnip.math.Pointing
 import net.createmod.ponder.api.PonderPalette
 import net.createmod.ponder.api.scene.SceneBuilder
@@ -43,7 +42,7 @@ object EnchantableRollerPonderScene {
                 world().modifyBlockEntity(normalRoller, RollerBlockEntity::class.java) {
                     it.animatedSpeed = -150f
                 }
-                world().modifyBlockEntity(enchantedRoller, EnchantableRollerBlockEntity::class.java) {
+                world().modifyBlockEntity(enchantedRoller, RollerBlockEntity::class.java) {
                     it.animatedSpeed = -150f
                 }
             }
@@ -52,7 +51,7 @@ object EnchantableRollerPonderScene {
                 world().modifyBlockEntity(normalRoller, RollerBlockEntity::class.java) {
                     it.animatedSpeed = 0f
                 }
-                world().modifyBlockEntity(enchantedRoller, EnchantableRollerBlockEntity::class.java) {
+                world().modifyBlockEntity(enchantedRoller, RollerBlockEntity::class.java) {
                     it.animatedSpeed = 0f
                 }
             }

@@ -4,7 +4,6 @@ import com.simibubi.create.AllItems
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity
 import com.simibubi.create.content.kinetics.press.PressingBehaviour
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder
-import io.github.cotrin8672.cem.content.block.press.EnchantableMechanicalPressBlockEntity
 import net.createmod.catnip.math.Pointing
 import net.createmod.ponder.api.PonderPalette
 import net.createmod.ponder.api.scene.SceneBuilder
@@ -62,7 +61,7 @@ object EnchantablePressPonderScene {
 
             idle(40)
 
-            world().modifyBlockEntity(enchantedPress, EnchantableMechanicalPressBlockEntity::class.java) {
+            world().modifyBlockEntity(enchantedPress, MechanicalPressBlockEntity::class.java) {
                 it.pressingBehaviour.start(PressingBehaviour.Mode.BASIN)
             }
             world().modifyBlockEntity(normalPress, MechanicalPressBlockEntity::class.java) {
@@ -80,7 +79,7 @@ object EnchantablePressPonderScene {
             world().createItemOnBelt(beltStart.east(), Direction.UP, ironBlock)
             idle(30)
             world().createItemOnBelt(beltStart.east(3), Direction.UP, ironBlock)
-            world().modifyBlockEntity(enchantedPress, EnchantableMechanicalPressBlockEntity::class.java) {
+            world().modifyBlockEntity(enchantedPress, MechanicalPressBlockEntity::class.java) {
                 it.pressingBehaviour.start(PressingBehaviour.Mode.BASIN)
             }
             idle(35)

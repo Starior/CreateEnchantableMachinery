@@ -4,6 +4,7 @@ import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackH
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack
 import com.simibubi.create.content.kinetics.fan.AirCurrent
 import com.simibubi.create.content.kinetics.fan.AirCurrentSound
+import com.simibubi.create.content.kinetics.fan.EncasedFanBlockEntity
 import com.simibubi.create.content.kinetics.fan.IAirCurrentSource
 import com.simibubi.create.foundation.advancement.AllAdvancements
 import io.github.cotrin8672.cem.mixin.ServerGamePacketListenerImplMixin
@@ -102,9 +103,9 @@ class EnchantableAirCurrent(source: IAirCurrentSource, efficiencyLevel: Int) : A
                     if (fanProcessing.applyProcessing(
                             entity,
                             processingType
-                        ) && source is EnchantableEncasedFanBlockEntity
+                        ) && source is EncasedFanBlockEntity
                     )
-                        (source as EnchantableEncasedFanBlockEntity).award(AllAdvancements.FAN_PROCESSING)
+                        (source as EncasedFanBlockEntity).award(AllAdvancements.FAN_PROCESSING)
                 continue
             }
 
@@ -124,8 +125,8 @@ class EnchantableAirCurrent(source: IAirCurrentSource, efficiencyLevel: Int) : A
                     return@handleProcessingOnAllItems TransportedResult.doNothing()
                 }
                 val applyProcessing = fanProcessing.applyProcessing(transported, world, processingType)
-                if (!applyProcessing.doesNothing() && source is EnchantableEncasedFanBlockEntity)
-                    (source as EnchantableEncasedFanBlockEntity).award(AllAdvancements.FAN_PROCESSING)
+                if (!applyProcessing.doesNothing() && source is EncasedFanBlockEntity)
+                    (source as EncasedFanBlockEntity).award(AllAdvancements.FAN_PROCESSING)
                 applyProcessing
             }
         }

@@ -1,10 +1,9 @@
 package io.github.cotrin8672.cem.content.ponder
 
+import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllItems
 import com.simibubi.create.content.kinetics.saw.SawBlockEntity
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder
-import io.github.cotrin8672.cem.content.block.saw.EnchantableSawBlockEntity
-import io.github.cotrin8672.cem.registry.BlockRegistration
 import net.createmod.catnip.math.Pointing
 import net.createmod.ponder.api.PonderPalette
 import net.createmod.ponder.api.scene.SceneBuilder
@@ -78,7 +77,7 @@ object EnchantableSawPonderScene {
             val sawSelect = util.select().position(sawPos)
             val enchantedSawSelect = util.select().position(enchantedSawPos)
             world().modifyBlockEntityNBT(sawSelect, SawBlockEntity::class.java) { it.putInt("RecipeIndex", 0) }
-            world().modifyBlockEntityNBT(enchantedSawSelect, EnchantableSawBlockEntity::class.java) {
+            world().modifyBlockEntityNBT(enchantedSawSelect, SawBlockEntity::class.java) {
                 it.putInt("RecipeIndex", 0)
             }
 
@@ -115,7 +114,7 @@ object EnchantableSawPonderScene {
 
             idle(20)
 
-            world().setBlock(verticalEnchantedSawPos, BlockRegistration.ENCHANTABLE_MECHANICAL_SAW.defaultState, false)
+            world().setBlock(verticalEnchantedSawPos, AllBlocks.MECHANICAL_SAW.defaultState, false)
             world().showSection(util.select().fromTo(shaftPos, verticalEnchantedSawPos), Direction.DOWN)
             world().setKineticSpeed(util.select().position(verticalEnchantedSawPos), 16f)
 

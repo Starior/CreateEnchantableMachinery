@@ -5,6 +5,7 @@ import com.simibubi.create.content.contraptions.behaviour.MovementContext
 import com.simibubi.create.content.contraptions.render.ActorVisual
 import com.simibubi.create.content.contraptions.render.ContraptionMatrices
 import com.simibubi.create.content.kinetics.drill.DrillMovementBehaviour
+import com.simibubi.create.content.kinetics.drill.DrillRenderer
 import com.simibubi.create.foundation.utility.BlockHelper
 import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld
 import dev.engine_room.flywheel.api.visualization.VisualizationContext
@@ -67,6 +68,6 @@ class EnchantableDrillMovementBehaviour : DrillMovementBehaviour() {
         buffer: MultiBufferSource,
     ) {
         if (!VisualizationManager.supportsVisualization(context.world))
-            EnchantableDrillRenderer.renderInContraption(context, renderWorld, matrices, buffer)
+            DrillRenderer.renderInContraption(context, renderWorld, matrices, buffer)
     }
 }

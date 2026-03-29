@@ -9,6 +9,7 @@ import io.github.cotrin8672.cem.mixin.KineticBlockEntityEffectsAccessor;
 import io.github.cotrin8672.cem.mixin.KineticEffectHandlerAccessor;
 import dev.engine_room.flywheel.lib.instance.ColoredLitInstance;
 import net.createmod.catnip.theme.Color;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 /**
@@ -45,6 +46,25 @@ public final class EnchantableKineticTint {
                 cfg.getEnchantTintBlue().get().floatValue(),
                 1f);
         cachedEnchantTint = Color.WHITE.mixWith(magic, cfg.getEnchantTintMix().get().floatValue());
+    }
+
+    /**
+     * Packed ARGB (opaque) for {@link net.minecraft.client.color.block.BlockColor} — multiplies block vertex colors
+     * when machinery is enchanted (e.g. mechanical plough has no rotating BER).
+     */
+    public static int enchantBlockTintArgb() {
+        Color c = enchantTintColor();
+        int r = channelToByte(c.getRed());
+        int g = channelToByte(c.getGreen());
+        int b = channelToByte(c.getBlue());
+        return 0xFF000000 | (r << 16) | (g << 8) | b;
+    }
+
+    private static int channelToByte(float channel) {
+        if (channel > 1f) {
+            return Mth.clamp((int) channel, 0, 255);
+        }
+        return Mth.clamp(Math.round(channel * 255f), 0, 255);
     }
 
     /**

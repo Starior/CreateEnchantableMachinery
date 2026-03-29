@@ -5,6 +5,7 @@ import com.simibubi.create.content.contraptions.behaviour.MovementContext
 import com.simibubi.create.content.contraptions.render.ActorVisual
 import com.simibubi.create.content.contraptions.render.ContraptionMatrices
 import com.simibubi.create.content.kinetics.saw.SawMovementBehaviour
+import com.simibubi.create.content.kinetics.saw.SawRenderer
 import com.simibubi.create.content.kinetics.saw.TreeCutter
 import com.simibubi.create.foundation.utility.BlockHelper
 import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld
@@ -87,6 +88,6 @@ class EnchantableSawMovementBehaviour : SawMovementBehaviour() {
         matrices: ContraptionMatrices,
         buffer: MultiBufferSource,
     ) {
-        EnchantableSawRenderer.renderInContraption(context, renderWorld, matrices, buffer)
+        SawRenderer.renderInContraption(context, renderWorld, matrices, buffer)
     }
 }

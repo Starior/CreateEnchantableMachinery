@@ -4,6 +4,8 @@ import com.simibubi.create.foundation.data.CreateRegistrate
 import io.github.cotrin8672.cem.config.CemConfig
 import io.github.cotrin8672.cem.config.ModConfigs
 import io.github.cotrin8672.cem.content.block.EnchantableBlockEntity
+import io.github.cotrin8672.cem.registry.BlockEntityRegistration
+import io.github.cotrin8672.cem.registry.CemMovementBehaviourSetup
 import net.minecraft.core.component.DataComponents
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
@@ -13,6 +15,7 @@ import net.neoforged.fml.ModLoadingContext
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.config.ModConfig
 import net.neoforged.neoforge.common.NeoForge
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.neoforge.event.level.BlockDropsEvent
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 
@@ -30,6 +33,12 @@ class Cem(container: ModContainer) {
     init {
         NeoForge.EVENT_BUS.addListener(this::onBlockDrops)
         REGISTRATE.registerEventListeners(MOD_BUS)
+        MOD_BUS.addListener<FMLCommonSetupEvent> { event ->
+            event.enqueueWork {
+                CemMovementBehaviourSetup.replaceCreateBehaviours()
+            }
+        }
+        BlockEntityRegistration.ensureRegistered()
         container.registerConfig(ModConfig.Type.CLIENT, CemConfig.CONFIG_SPEC)
         ModConfigs.register(ModLoadingContext.get(), container)
     }

@@ -1,6 +1,7 @@
 package io.github.cotrin8672.cem.mixin;
 
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.simibubi.create.foundation.utility.CreateLang;
 import io.github.cotrin8672.cem.content.block.EnchantableBlockEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -20,7 +21,9 @@ public abstract class KineticBlockEntityGoggleEnchantmentsMixin {
         if (enchantable.getEnchantments().isEmpty()) return;
 
         for (var entry : enchantable.getEnchantments().entrySet()) {
-            tooltip.add(Enchantment.getFullname(entry.getKey(), entry.getIntValue()));
+            CreateLang.builder()
+                    .add(Enchantment.getFullname(entry.getKey(), entry.getIntValue()))
+                    .forGoggles(tooltip, 1);
         }
         // Create API: true = goggle contribution is valid (IHaveGoggleInformation). GoggleOverlayRenderer only skips
         // the overlay when BOTH goggle and hover return false and both interfaces exist; empty tooltip still aborts

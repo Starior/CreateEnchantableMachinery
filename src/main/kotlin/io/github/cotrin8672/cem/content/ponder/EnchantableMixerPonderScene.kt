@@ -3,7 +3,6 @@ package io.github.cotrin8672.cem.content.ponder
 import com.simibubi.create.AllItems
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder
-import io.github.cotrin8672.cem.content.block.mixer.EnchantableMechanicalMixerBlockEntity
 import net.createmod.catnip.math.Pointing
 import net.createmod.ponder.api.PonderPalette
 import net.createmod.ponder.api.scene.SceneBuilder
@@ -67,7 +66,7 @@ object EnchantableMixerPonderScene {
 
             idle(40)
 
-            world().modifyBlockEntity(enchantedMixer, EnchantableMechanicalMixerBlockEntity::class.java) {
+            world().modifyBlockEntity(enchantedMixer, MechanicalMixerBlockEntity::class.java) {
                 it.startProcessingBasin()
             }
             world().modifyBlockEntity(normalMixer, MechanicalMixerBlockEntity::class.java) {

@@ -3,7 +3,6 @@ package io.github.cotrin8672.cem.content.ponder
 import com.simibubi.create.AllItems
 import com.simibubi.create.content.kinetics.millstone.MillstoneBlockEntity
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder
-import io.github.cotrin8672.cem.content.block.millstone.EnchantableMillstoneBlockEntity
 import net.createmod.catnip.math.Pointing
 import net.createmod.ponder.api.PonderPalette
 import net.createmod.ponder.api.scene.SceneBuilder
@@ -76,7 +75,7 @@ object EnchantableMillstonePonderScene {
             world().modifyBlockEntity(millstonePos, MillstoneBlockEntity::class.java) {
                 it.inputInv.setStackInSlot(0, stack)
             }
-            world().modifyBlockEntity(enchantedMillstonePos, EnchantableMillstoneBlockEntity::class.java) {
+            world().modifyBlockEntity(enchantedMillstonePos, MillstoneBlockEntity::class.java) {
                 it.inputInv.setStackInSlot(0, stack)
             }
 
@@ -90,7 +89,7 @@ object EnchantableMillstonePonderScene {
             val flour = AllItems.WHEAT_FLOUR.asStack()
             // Enchantable Millstone processing end
             idle(10)
-            world().modifyBlockEntity(enchantedMillstonePos, EnchantableMillstoneBlockEntity::class.java) {
+            world().modifyBlockEntity(enchantedMillstonePos, MillstoneBlockEntity::class.java) {
                 it.inputInv.setStackInSlot(0, ItemStack.EMPTY)
             }
             world().flapFunnel(rightFunnel, true)

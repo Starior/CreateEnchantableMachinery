@@ -1,5 +1,6 @@
 package io.github.cotrin8672.cem.mixin;
 
+import com.simibubi.create.foundation.blockEntity.SyncedBlockEntity;
 import io.github.cotrin8672.cem.content.block.EnchantableBlockEntity;
 import io.github.cotrin8672.cem.util.EnchantableRules;
 import net.minecraft.core.BlockPos;
@@ -9,6 +10,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -46,5 +48,8 @@ public abstract class BlockItemMixin extends Item {
         enchantableBlockEntity.setEnchantment(enchantments);
         enchantableBlockEntity.setSourceItem(stack.getItem());
         blockEntity.setChanged();
+        if (level instanceof ServerLevel && blockEntity instanceof SyncedBlockEntity synced) {
+            synced.notifyUpdate();
+        }
     }
 }

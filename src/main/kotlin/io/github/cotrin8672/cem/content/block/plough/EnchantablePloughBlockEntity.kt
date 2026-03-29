@@ -5,7 +5,6 @@ import com.simibubi.create.foundation.blockEntity.SyncedBlockEntity
 import com.simibubi.create.foundation.utility.CreateLang
 import io.github.cotrin8672.cem.content.block.EnchantableBlockEntity
 import io.github.cotrin8672.cem.content.block.EnchantableBlockEntityDelegate
-import joptsimple.internal.Strings
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
@@ -26,9 +25,9 @@ class EnchantablePloughBlockEntity(
 
         if (getEnchantments().entrySet().isEmpty()) return false
         for (instance in getEnchantments().entrySet()) {
-            CreateLang.text(Strings.repeat(' ', 0))
+            CreateLang.builder()
                 .add(getFullname(instance.key, instance.intValue))
-                .forGoggles(tooltip)
+                .forGoggles(tooltip, 1)
         }
         return true
     }

@@ -2,7 +2,7 @@ package io.github.cotrin8672.cem.content.ponder
 
 import com.simibubi.create.AllItems
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder
-import io.github.cotrin8672.cem.content.block.harvester.EnchantableHarvesterBlockEntity
+import com.simibubi.create.content.contraptions.actors.harvester.HarvesterBlockEntity
 import net.createmod.catnip.math.Pointing
 import net.createmod.ponder.api.PonderPalette
 import net.createmod.ponder.api.scene.SceneBuilder
@@ -54,7 +54,7 @@ object EnchantableHarvesterPonderScene {
             world().setKineticSpeed(util.select().position(cogWheelPos), -16f)
             world().setKineticSpeed(gantryShaftSection, -16f)
             world().moveSection(gantrySection, util.vector().of(0.0, 0.0, -2.0), 40)
-            world().modifyBlockEntity(enchantedHarvesterPos, EnchantableHarvesterBlockEntity::class.java) {
+            world().modifyBlockEntity(enchantedHarvesterPos, HarvesterBlockEntity::class.java) {
                 it.animatedSpeed = -150f
             }
 
@@ -65,7 +65,7 @@ object EnchantableHarvesterPonderScene {
 
             idle(20)
 
-            world().modifyBlockEntity(enchantedHarvesterPos, EnchantableHarvesterBlockEntity::class.java) {
+            world().modifyBlockEntity(enchantedHarvesterPos, HarvesterBlockEntity::class.java) {
                 it.animatedSpeed = 0f
             }
 
@@ -75,13 +75,13 @@ object EnchantableHarvesterPonderScene {
             world().setKineticSpeed(util.select().position(cogWheelPos), 16f)
             world().setKineticSpeed(gantryShaftSection, 16f)
             world().moveSection(gantrySection, util.vector().of(0.0, 0.0, 2.0), 40)
-            world().modifyBlockEntity(enchantedHarvesterPos, EnchantableHarvesterBlockEntity::class.java) {
+            world().modifyBlockEntity(enchantedHarvesterPos, HarvesterBlockEntity::class.java) {
                 it.animatedSpeed = 150f
             }
 
             idle(40)
 
-            world().modifyBlockEntity(enchantedHarvesterPos, EnchantableHarvesterBlockEntity::class.java) {
+            world().modifyBlockEntity(enchantedHarvesterPos, HarvesterBlockEntity::class.java) {
                 it.animatedSpeed = 0f
             }
 
@@ -114,7 +114,7 @@ object EnchantableHarvesterPonderScene {
             world().setKineticSpeed(util.select().position(cogWheelPos), -16f)
             world().setKineticSpeed(gantryShaftSection, -16f)
             world().moveSection(gantrySection, util.vector().of(0.0, 0.0, -2.0), 40)
-            world().modifyBlockEntity(enchantedHarvesterPos, EnchantableHarvesterBlockEntity::class.java) {
+            world().modifyBlockEntity(enchantedHarvesterPos, HarvesterBlockEntity::class.java) {
                 it.animatedSpeed = -150f
             }
 
@@ -125,7 +125,7 @@ object EnchantableHarvesterPonderScene {
 
             idle(20)
 
-            world().modifyBlockEntity(enchantedHarvesterPos, EnchantableHarvesterBlockEntity::class.java) {
+            world().modifyBlockEntity(enchantedHarvesterPos, HarvesterBlockEntity::class.java) {
                 it.animatedSpeed = 0f
             }
 
@@ -135,13 +135,13 @@ object EnchantableHarvesterPonderScene {
             world().setKineticSpeed(util.select().position(cogWheelPos), 16f)
             world().setKineticSpeed(gantryShaftSection, 16f)
             world().moveSection(gantrySection, util.vector().of(0.0, 0.0, 2.0), 40)
-            world().modifyBlockEntity(enchantedHarvesterPos, EnchantableHarvesterBlockEntity::class.java) {
+            world().modifyBlockEntity(enchantedHarvesterPos, HarvesterBlockEntity::class.java) {
                 it.animatedSpeed = 150f
             }
 
             idle(40)
 
-            world().modifyBlockEntity(enchantedHarvesterPos, EnchantableHarvesterBlockEntity::class.java) {
+            world().modifyBlockEntity(enchantedHarvesterPos, HarvesterBlockEntity::class.java) {
                 it.animatedSpeed = 0f
             }
 
