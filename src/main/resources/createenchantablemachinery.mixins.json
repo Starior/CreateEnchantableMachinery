@@ -5,6 +5,7 @@
   "minVersion": "0.8",
   "client": [
     "AbstractBlockEntityVisualAccessor",
+    "AbstractBlockEntityVisualInvoker",
     "MechanicalPressRendererEnchantTintMixin",
     "SawRendererEnchantTintMixin",
     "PressVisualEnchantTintMixin",
@@ -15,6 +16,7 @@
     "KineticBlockEntityRendererEnchantTintMixin",
     "RotatingInstanceEnchantTintMixin",
     "SingleAxisRotatingVisualEnchantTintMixin",
+    "SingleAxisRotatingVisualCrushingWheelGlintMixin",
     "WorldSectionElementImplMixin"
   ],
   "mixins": [
