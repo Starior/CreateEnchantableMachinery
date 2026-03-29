@@ -1,0 +1,27 @@
+{
+  "values": [
+    "create:millstone",
+    { "id": "dndecor:amethyst_millstone", "required": false },
+    { "id": "dndecor:asurine_millstone", "required": false },
+    { "id": "dndecor:basalt_millstone", "required": false },
+    { "id": "dndecor:blackstone_millstone", "required": false },
+    { "id": "dndecor:calcite_millstone", "required": false },
+    { "id": "dndecor:crimsite_millstone", "required": false },
+    { "id": "dndecor:deepslate_millstone", "required": false },
+    { "id": "dndecor:diorite_millstone", "required": false },
+    { "id": "dndecor:dolomite_millstone", "required": false },
+    { "id": "dndecor:dripstone_millstone", "required": false },
+    { "id": "dndecor:gabbro_millstone", "required": false },
+    { "id": "dndecor:granite_millstone", "required": false },
+    { "id": "dndecor:limestone_millstone", "required": false },
+    { "id": "dndecor:netherrack_millstone", "required": false },
+    { "id": "dndecor:ochrum_millstone", "required": false },
+    { "id": "dndecor:packed_mud_millstone", "required": false },
+    { "id": "dndecor:scorchia_millstone", "required": false },
+    { "id": "dndecor:scoria_millstone", "required": false },
+    { "id": "dndecor:stone_millstone", "required": false },
+    { "id": "dndecor:tuff_millstone", "required": false },
+    { "id": "dndecor:veridium_millstone", "required": false },
+    { "id": "dndecor:weathered_limestone_millstone", "required": false }
+  ]
+}

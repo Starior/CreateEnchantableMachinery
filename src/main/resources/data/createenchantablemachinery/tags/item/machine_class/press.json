@@ -1,0 +1,13 @@
+{
+  "values": [
+    "create:mechanical_press",
+    { "id": "createcasing:brass_press", "required": false },
+    { "id": "createcasing:copper_press", "required": false },
+    { "id": "createcasing:creative_press", "required": false },
+    { "id": "createcasing:industrial_iron_press", "required": false },
+    { "id": "createcasing:railway_press", "required": false },
+    { "id": "createcasing:refined_radiance_press", "required": false },
+    { "id": "createcasing:shadow_steel_press", "required": false },
+    { "id": "createcasing:weathered_iron_press", "required": false }
+  ]
+}

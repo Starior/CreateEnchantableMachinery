@@ -34,6 +34,7 @@
     "HarvesterBlockEntityEnchantmentsMixin",
     "HarvesterBlockEntityNbtMixin",
     "HarvesterMovementBehaviourEnchantmentsMixin",
+    "IItemExtensionEnchantmentsMixin",
     "IWrenchableEnchantmentsMixin",
     "KineticBlockEntityEffectsAccessor",
     "KineticEffectHandlerAccessor",

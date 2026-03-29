@@ -1,11 +1,15 @@
 package io.github.cotrin8672.cem
 
-import com.simibubi.create.AllBlocks
+import com.simibubi.create.content.contraptions.actors.plough.PloughBlock
 import io.github.cotrin8672.cem.client.EnchantableKineticTint
 import io.github.cotrin8672.cem.config.CemConfig
 import io.github.cotrin8672.cem.content.block.EnchantableBlockEntity
 import io.github.cotrin8672.cem.content.ponder.CemPonderPlugin
 import net.createmod.ponder.foundation.PonderIndex
+import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.level.BlockAndTintGetter
+import net.minecraft.world.level.block.state.BlockState
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.config.ModConfigEvent
@@ -30,20 +34,22 @@ class CemClient {
             PonderIndex.addPlugin(CemPonderPlugin)
         }
         MOD_BUS.addListener<RegisterColorHandlersEvent.Block> { event ->
-            event.register(
-                { _, level, pos, _ ->
-                    if (level == null || pos == null) {
-                        return@register 0xFFFFFF
-                    }
+            val ploughTint = { _: BlockState, level: BlockAndTintGetter?, pos: BlockPos?, _: Int ->
+                if (level == null || pos == null) {
+                    0xFFFFFF
+                } else {
                     val be = level.getBlockEntity(pos)
                     if (be is EnchantableBlockEntity && !be.getEnchantments().isEmpty) {
                         EnchantableKineticTint.enchantBlockTintArgb()
                     } else {
                         0xFFFFFF
                     }
-                },
-                AllBlocks.MECHANICAL_PLOUGH.get(),
-            )
+                }
+            }
+            val ploughBlocks = BuiltInRegistries.BLOCK.filter { it is PloughBlock }
+            if (ploughBlocks.isNotEmpty()) {
+                event.register(ploughTint, *ploughBlocks.toTypedArray())
+            }
         }
         NeoForge.EVENT_BUS.addListener<ClientPlayerNetworkEvent.LoggingIn> {
             EnchantableKineticTint.refreshCachedEnchantTint()

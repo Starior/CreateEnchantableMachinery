@@ -1,6 +1,7 @@
 package io.github.cotrin8672.cem.mixin;
 
 import io.github.cotrin8672.cem.util.AnvilCompatibilityContext;
+import io.github.cotrin8672.cem.util.MachineEnchantRules;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -25,8 +26,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class AnvilMenuMixin {
     private static final TagKey<Item> CEM_ENCHANTABLE_BLOCKS_TAG =
             TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("createenchantablemachinery", "enchantable_blocks"));
-    private static final TagKey<Item> CEM_ALLOW_FORTUNE_SILK_PAIR_TAG =
-            TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("createenchantablemachinery", "allow_fortune_silk_pair"));
 
     @Unique
     private int cem$compatContextDepth = 0;
@@ -36,7 +35,7 @@ public class AnvilMenuMixin {
         AnvilMenu self = (AnvilMenu) (Object) this;
         ItemStack left = self.getSlot(0).getItem();
         ItemStack right = self.getSlot(1).getItem();
-        if (!isCrushingWheelItem(left)) return;
+        if (!MachineEnchantRules.allowsFortuneSilkPair(left)) return;
         if (!isEnchantmentSource(right)) return;
 
         AnvilCompatibilityContext.push();
@@ -57,12 +56,12 @@ public class AnvilMenuMixin {
 
         ItemStack left = self.getSlot(0).getItem();
         ItemStack right = self.getSlot(1).getItem();
-        boolean isCrushingWheel = isCrushingWheelItem(left);
+        boolean allowFortuneSilkPair = MachineEnchantRules.allowsFortuneSilkPair(left);
 
         if (left.isEmpty()) {
             return;
         }
-        if (!isMachineBlockItem(left) && !isCrushingWheel) {
+        if (!isMachineBlockItem(left) && !allowFortuneSilkPair) {
             return;
         }
         if (right.isEmpty()) {
@@ -89,7 +88,7 @@ public class AnvilMenuMixin {
         if (rightEnchantments.isEmpty()) {
             return;
         }
-        if (!isCrushingWheel) {
+        if (!allowFortuneSilkPair) {
             return;
         }
 
@@ -137,10 +136,6 @@ public class AnvilMenuMixin {
         if (!stored.isEmpty()) return true;
         ItemEnchantments direct = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
         return !direct.isEmpty();
-    }
-
-    private static boolean isCrushingWheelItem(ItemStack stack) {
-        return stack.is(CEM_ALLOW_FORTUNE_SILK_PAIR_TAG);
     }
 
     private static int combineAnvilLevel(int existingLevel, int incomingLevel, int maxLevel) {
